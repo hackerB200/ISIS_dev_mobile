@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name" translatable="false">Pouet</string>
+    <string name="name_profile" translatable="false">Eva Tubia</string>
+    <string name="status_profile">Alternante Mipih - ISIS</string>
+    <string name="email_profile" translatable="false">pouet@gmail.com</string>
+    <string name="account_profile" translatable="false">www.linkedin.com/pouet</string>
+    <string name="button_profile">Démarrer</string>
+    <string name="page_profile">Profil</string>
+    <string name="page_movies">Films</string>
+    <string name="page_series">Séries</string>
+    <string name="page_actors">Acteurs</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="button_profile">Iniziare</string>
+    <string name="status_profile">Apprendista Mipih - ISIS</string>
+    <string name="page_profile">Profilo</string>
+    <string name="page_movies">Film</string>
+    <string name="page_series">Serie</string>
+    <string name="page_actors">Attori</string>
+</resources>
