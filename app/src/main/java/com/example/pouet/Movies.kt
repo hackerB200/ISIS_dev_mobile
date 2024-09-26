@@ -25,6 +25,8 @@ import java.time.format.TextStyle
 fun FilmsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
     val movies by viewModel.movies.collectAsStateWithLifecycle()
 
+
+
     if (movies.isEmpty()) {
         Row (modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
             Text(text = stringResource(R.string.page_movies), color = Color.White, style = MaterialTheme.typography.headlineLarge)

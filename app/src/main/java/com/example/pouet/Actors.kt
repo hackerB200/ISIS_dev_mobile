@@ -1,6 +1,5 @@
 package com.example.pouet
 
-import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,13 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import coil.compose.AsyncImage
-import java.time.LocalDate
-import java.time.format.TextStyle
 
 @Composable
 fun ActorsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
@@ -42,10 +38,12 @@ fun ActorsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
                     ),
                 ) {
                     Column (modifier = Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w780/" + actors[index].profile_path,
-                            contentDescription = actors[index].id.toString(),
-                        )
+                        if (actors[index].profile_path != null) {
+                            AsyncImage(
+                                model = "https://image.tmdb.org/t/p/w780/" + actors[index].profile_path,
+                                contentDescription = actors[index].id.toString(),
+                            )
+                        }
                         Text(
                             text = actors[index].name,
                             style = MaterialTheme.typography.headlineSmall

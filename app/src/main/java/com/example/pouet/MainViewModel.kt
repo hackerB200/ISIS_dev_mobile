@@ -2,8 +2,10 @@ package com.example.pouet
 
 import android.util.Log
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
@@ -20,6 +22,9 @@ class MainViewModel : ViewModel() {
 
     var currentDestination by mutableStateOf(Destination.PROFILE)
 
+    var searchText by mutableStateOf("")
+    var isSearching by mutableStateOf(false)
+
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.themoviedb.org/3/")
         .addConverterFactory(MoshiConverterFactory.create())
@@ -30,6 +35,7 @@ class MainViewModel : ViewModel() {
     var movies = MutableStateFlow<List<Movie>>(listOf())
     var series = MutableStateFlow<List<Serie>>(listOf())
     var actors = MutableStateFlow<List<Actor>>(listOf())
+
 
     fun navigateTo(index: Int) {
         currentDestination = Destination.entries.toTypedArray()[index]
@@ -56,5 +62,45 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    //Search Bar actions
+    fun openSearchBar() {
+        isSearching = true
+    }
+
+    fun closeSearchBar() {
+        isSearching = false
+    }
+
+    fun onSearch() {
+        isSearching = false
+        when(currentDestination) {
+            Destination.MOVIES -> searchMovies(searchText)
+            Destination.SERIES -> searchSeries(searchText)
+            Destination.ACTORS -> searchActors(searchText)
+            else -> searchMovies(searchText)
+        }
+
+    }
+
+    private fun searchMovies(search: String) {
+        viewModelScope.launch {
+            val listMovies = api.searchMovies(api_key, search)
+            movies.value = listMovies.results
+        }
+    }
+
+    private fun searchSeries(search: String) {
+        viewModelScope.launch {
+            val listSeries = api.searchSeries(api_key, search)
+            series.value = listSeries.results
+        }
+    }
+
+    private fun searchActors(search: String) {
+        viewModelScope.launch {
+            val listActors = api.searchActors(api_key, search)
+            actors.value = listActors.results
+        }
+    }
 
 }

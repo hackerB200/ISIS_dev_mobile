@@ -1,7 +1,10 @@
 package com.example.pouet
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.icons.filled.Search
 import com.shirishkoirala.fontawesome.Icons
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -14,14 +17,19 @@ import androidx.compose.ui.unit.dp
 import com.shirishkoirala.fontawesome.ComposeIconView
 import androidx.window.core.layout.*
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyNavigationBar(
     windowClass: WindowSizeClass,
     viewModel: MainViewModel
 ) {
 
-    val navItems = listOf(stringResource(R.string.page_movies), stringResource(R.string.page_series), stringResource(R.string.page_actors))
-    val navIcons = listOf(Icons.film, Icons.display , Icons.user)
+    val navItems = listOf(
+        stringResource(R.string.page_movies),
+        stringResource(R.string.page_series),
+        stringResource(R.string.page_actors)
+    )
+    val navIcons = listOf(Icons.film, Icons.display, Icons.user)
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType =
         with(adaptiveInfo) {
@@ -66,21 +74,37 @@ fun MyNavigationBar(
         navigationSuiteItems = {
             navItems.forEachIndexed { index, navItem ->
                 item(
-                    icon = { ComposeIconView(navIcons[index], size = 24.dp, modifier = Modifier.padding(2.dp)) },
+                    icon = {
+                        ComposeIconView(
+                            navIcons[index],
+                            size = 24.dp,
+                            modifier = Modifier.padding(2.dp)
+                        )
+                    },
                     label = { Text(navItem) },
                     selected = viewModel.currentDestination.ordinal == index,
                     onClick = { viewModel.navigateTo(index) },
                     colors = myColors,
 
-                )
+                    )
             }
         }
     ) {
-        when(viewModel.currentDestination) {
-            Destination.MOVIES -> FilmsScreen(windowClass, viewModel)
-            Destination.SERIES -> SeriesScreen(windowClass, viewModel)
-            Destination.ACTORS -> ActorsScreen(windowClass, viewModel)
-            Destination.PROFILE -> HomeScreen(windowClass, viewModel)
+        Scaffold(
+            topBar = {
+                MySearchBar(windowClass, viewModel)
+            },
+            contentColor = Color.White,
+            containerColor = Color.Black,
+        ) { innerPadding ->
+            Column(modifier = Modifier.padding(innerPadding)) {
+                when (viewModel.currentDestination) {
+                    Destination.MOVIES -> FilmsScreen(windowClass, viewModel)
+                    Destination.SERIES -> SeriesScreen(windowClass, viewModel)
+                    Destination.ACTORS -> ActorsScreen(windowClass, viewModel)
+                    Destination.PROFILE -> HomeScreen(windowClass, viewModel)
+                }
+            }
         }
     }
 
