@@ -92,7 +92,9 @@ fun MyNavigationBar(
     ) {
         Scaffold(
             topBar = {
-                MySearchBar(windowClass, viewModel)
+                if (viewModel.currentDestination == Destination.MOVIES || viewModel.currentDestination == Destination.SERIES || viewModel.currentDestination == Destination.ACTORS) {
+                    MySearchBar(windowClass, viewModel)
+                }
             },
             contentColor = Color.White,
             containerColor = Color.Black,
@@ -103,6 +105,9 @@ fun MyNavigationBar(
                     Destination.SERIES -> SeriesScreen(windowClass, viewModel)
                     Destination.ACTORS -> ActorsScreen(windowClass, viewModel)
                     Destination.PROFILE -> HomeScreen(windowClass, viewModel)
+                    Destination.DETAILS_MOVIES -> DetailMovieScreen(windowClass, viewModel)
+                    Destination.DETAILS_SERIES -> DetailSerieScreen(windowClass, viewModel)
+                    Destination.DETAILS_ACTORS -> DetailActorScreen(windowClass, viewModel)
                 }
             }
         }

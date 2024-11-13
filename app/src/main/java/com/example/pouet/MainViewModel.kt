@@ -15,7 +15,10 @@ enum class Destination (index: Int) {
     MOVIES(0),
     SERIES(1),
     ACTORS(2),
-    PROFILE(3)
+    PROFILE(3),
+    DETAILS_MOVIES(4),
+    DETAILS_SERIES(5),
+    DETAILS_ACTORS(6);
 }
 
 class MainViewModel : ViewModel() {
@@ -31,11 +34,15 @@ class MainViewModel : ViewModel() {
         .build();
     val api = retrofit.create(TMDBApi::class.java)
     val api_key = "741e74ad116edeaf99ff07418b68a085"
+    val append_to_response = "credits"
 
     var movies = MutableStateFlow<List<Movie>>(listOf())
     var series = MutableStateFlow<List<Serie>>(listOf())
     var actors = MutableStateFlow<List<Actor>>(listOf())
 
+    var currentMovie = MutableStateFlow<Movie?> (null)
+    var currentSerie = MutableStateFlow<Serie?> (null)
+    var currentActor = MutableStateFlow<Actor?> (null)
 
     fun navigateTo(index: Int) {
         currentDestination = Destination.entries.toTypedArray()[index]
@@ -60,6 +67,30 @@ class MainViewModel : ViewModel() {
             val listActors = api.getTrendingActors(api_key)
             actors.value = listActors.results
         }
+    }
+
+    fun selectMovie(id: Int) {
+        viewModelScope.launch {
+            val movie = api.getMovie(id, api_key, append_to_response)
+            currentMovie.value = movie
+        }
+        currentDestination = Destination.DETAILS_MOVIES
+    }
+
+    fun selectSerie(id: Int) {
+        viewModelScope.launch {
+            val serie = api.getSeries(id, api_key, append_to_response)
+            currentSerie.value = serie
+        }
+        currentDestination = Destination.DETAILS_SERIES
+    }
+
+    fun selectActor(id: Int) {
+        viewModelScope.launch {
+            val actor = api.getActor(id, api_key)
+            currentActor.value = actor
+        }
+        currentDestination = Destination.DETAILS_ACTORS
     }
 
     //Search Bar actions
