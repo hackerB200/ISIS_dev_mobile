@@ -36,6 +36,9 @@ fun ActorsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
                         containerColor = colorResource(R.color.teal_700),
                         contentColor = Color.Black,
                     ),
+                    onClick = {
+                        viewModel.selectActor(actors[index].id)
+                    }
                 ) {
                     Column (modifier = Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                         if (actors[index].profile_path != null) {
