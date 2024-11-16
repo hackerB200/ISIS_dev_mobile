@@ -1,5 +1,6 @@
 package com.example.pouet
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,10 +34,16 @@ fun MyNavigationBar(
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType =
         with(adaptiveInfo) {
-            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
-                NavigationSuiteType.NavigationDrawer
-            } else {
-                NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
+            when (windowSizeClass.windowWidthSizeClass) {
+                WindowWidthSizeClass.MEDIUM -> {
+                    NavigationSuiteType.NavigationRail
+                }
+                WindowWidthSizeClass.COMPACT -> {
+                    NavigationSuiteType.NavigationBar
+                }
+                else -> {
+                    NavigationSuiteType.NavigationDrawer
+                }
             }
         }
 
