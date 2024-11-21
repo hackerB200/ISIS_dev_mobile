@@ -3,9 +3,7 @@ package com.example.pouet
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.icons.filled.Search
 import com.shirishkoirala.fontawesome.Icons
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -18,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.shirishkoirala.fontawesome.ComposeIconView
 import androidx.window.core.layout.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyNavigationBar(
     windowClass: WindowSizeClass,
@@ -34,17 +31,11 @@ fun MyNavigationBar(
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType =
         with(adaptiveInfo) {
-            when (windowSizeClass.windowWidthSizeClass) {
-                WindowWidthSizeClass.MEDIUM -> {
-                    NavigationSuiteType.NavigationRail
-                }
-                WindowWidthSizeClass.COMPACT -> {
-                    NavigationSuiteType.NavigationBar
-                }
-                else -> {
-                    NavigationSuiteType.NavigationDrawer
-                }
-            }
+            Log.e("responsive", windowSizeClass.windowWidthSizeClass.toString())
+            if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
+                NavigationSuiteType.NavigationBar
+            } else
+                NavigationSuiteType.NavigationRail
         }
 
     val myColors = NavigationSuiteItemColors(

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -25,7 +26,10 @@ import java.time.format.TextStyle
 fun FilmsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
     val movies by viewModel.movies.collectAsStateWithLifecycle()
 
-
+    var columns = 2
+    if (windowClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
+        columns = 3
+    }
 
     if (movies.isEmpty()) {
         Row (modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
@@ -34,7 +38,7 @@ fun FilmsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
         Log.e("films", "movies empty")
         viewModel.getFilmsInitiaux()
     } else {
-        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(15.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(columns), horizontalArrangement = Arrangement.spacedBy(15.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
             items(movies.size) { index ->
                 Card(
                     modifier = Modifier.height(350.dp),

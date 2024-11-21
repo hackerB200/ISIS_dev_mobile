@@ -1,15 +1,12 @@
 package com.example.pouet
 
-import android.util.Log
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
 enum class Destination (index: Int) {
     MOVIES(0),
@@ -21,25 +18,17 @@ enum class Destination (index: Int) {
     DETAILS_ACTORS(6);
 }
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel  @Inject constructor(private val repo: Repository): ViewModel() {
 
     var currentDestination by mutableStateOf(Destination.PROFILE)
 
     var searchText by mutableStateOf("")
     var isSearching by mutableStateOf(false)
 
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.themoviedb.org/3/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build();
-    val api = retrofit.create(TMDBApi::class.java)
-    val api_key = "741e74ad116edeaf99ff07418b68a085"
-    val append_to_response = "credits"
-
     var movies = MutableStateFlow<List<Movie>>(listOf())
     var series = MutableStateFlow<List<Serie>>(listOf())
     var actors = MutableStateFlow<List<Actor>>(listOf())
-
     var currentMovie = MutableStateFlow<Movie?> (null)
     var currentSerie = MutableStateFlow<Serie?> (null)
     var currentActor = MutableStateFlow<Actor?> (null)
@@ -49,29 +38,20 @@ class MainViewModel : ViewModel() {
     }
 
     fun getFilmsInitiaux() {
-        viewModelScope.launch {
-            val listMovies = api.getTrendingMovies(api_key)
-            movies.value = listMovies.results
-        }
+        viewModelScope.launch { movies.value = repo.trendingMovies().results }
     }
 
     fun getSeriesInitiales() {
-        viewModelScope.launch {
-            val listSeries = api.getTrendingSeries(api_key)
-            series.value = listSeries.results
-        }
+        viewModelScope.launch { series.value = repo.trendingSeries().results }
     }
 
     fun getActeursInitiaux() {
-        viewModelScope.launch {
-            val listActors = api.getTrendingActors(api_key)
-            actors.value = listActors.results
-        }
+       viewModelScope.launch { actors.value = repo.trendingActors().results }
     }
 
     fun selectMovie(id: Int) {
         viewModelScope.launch {
-            val movie = api.getMovie(id, api_key, append_to_response)
+            val movie = repo.getMovie(id)
             currentMovie.value = movie
         }
         currentDestination = Destination.DETAILS_MOVIES
@@ -79,7 +59,7 @@ class MainViewModel : ViewModel() {
 
     fun selectSerie(id: Int) {
         viewModelScope.launch {
-            val serie = api.getSeries(id, api_key, append_to_response)
+            val serie = repo.getSeries(id)
             currentSerie.value = serie
         }
         currentDestination = Destination.DETAILS_SERIES
@@ -87,10 +67,31 @@ class MainViewModel : ViewModel() {
 
     fun selectActor(id: Int) {
         viewModelScope.launch {
-            val actor = api.getActor(id, api_key)
+            val actor = repo.getActor(id)
             currentActor.value = actor
         }
         currentDestination = Destination.DETAILS_ACTORS
+    }
+
+    private fun searchMovies(search: String) {
+       viewModelScope.launch {
+           val listMovies = repo.searchMovies(search)
+           movies.value = listMovies.results
+       }
+    }
+
+    private fun searchSeries(search: String) {
+        viewModelScope.launch {
+            val listSeries = repo.searchSeries(search)
+            series.value = listSeries.results
+        }
+    }
+
+    private fun searchActors(search: String) {
+        viewModelScope.launch {
+            val listActors = repo.searchActors(search)
+            actors.value = listActors.results
+        }
     }
 
     //Search Bar actions
@@ -111,27 +112,6 @@ class MainViewModel : ViewModel() {
             else -> searchMovies(searchText)
         }
 
-    }
-
-    private fun searchMovies(search: String) {
-        viewModelScope.launch {
-            val listMovies = api.searchMovies(api_key, search)
-            movies.value = listMovies.results
-        }
-    }
-
-    private fun searchSeries(search: String) {
-        viewModelScope.launch {
-            val listSeries = api.searchSeries(api_key, search)
-            series.value = listSeries.results
-        }
-    }
-
-    private fun searchActors(search: String) {
-        viewModelScope.launch {
-            val listActors = api.searchActors(api_key, search)
-            actors.value = listActors.results
-        }
     }
 
 }

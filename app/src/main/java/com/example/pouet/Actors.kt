@@ -15,11 +15,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
 @Composable
 fun ActorsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
     val actors by viewModel.actors.collectAsStateWithLifecycle()
+
+    var columns = 2
+    if (windowClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
+        columns = 3
+    }
 
     if (actors.isEmpty()) {
         Row (modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
@@ -28,7 +34,7 @@ fun ActorsScreen(windowClass: WindowSizeClass, viewModel: MainViewModel) {
         Log.e("actors", "actors empty")
         viewModel.getActeursInitiaux()
     } else {
-        LazyVerticalGrid(columns = GridCells.Fixed(2), horizontalArrangement = Arrangement.spacedBy(15.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
+        LazyVerticalGrid(columns = GridCells.Fixed(columns), horizontalArrangement = Arrangement.spacedBy(15.dp), verticalArrangement = Arrangement.spacedBy(15.dp)) {
             items(actors.size) { index ->
                 Card(
                     modifier = Modifier.height(350.dp),

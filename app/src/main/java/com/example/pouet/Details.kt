@@ -184,7 +184,7 @@ fun DetailActorScreen(windowSizeClass: WindowSizeClass, viewModel: MainViewModel
     }
 }
 
-// Functions
+// Resusable Functions
 
 @Composable
 fun CountryAndRating(video: Video) {
