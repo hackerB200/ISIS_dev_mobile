@@ -3,6 +3,8 @@ package com.example.pouet
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -47,6 +49,15 @@ fun MySearchBar(windowClass: WindowSizeClass, viewModel: MainViewModel) {
                 .fillMaxWidth()
                 .padding(vertical = 5.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically
         ) {
+            if (viewModel.isSearchingForFavorites) {
+                IconButton(onClick = { viewModel.stopSearchForFavorites() }, modifier = Modifier.padding(end = 10.dp)) {
+                    Icon(Icons.Default.Favorite, contentDescription = "Favorite", tint = colorResource(id = R.color.teal_700), modifier = Modifier.size(40.dp))
+                }
+            } else {
+                IconButton(onClick = { viewModel.searchForFavorites() }, modifier = Modifier.padding(end = 10.dp)) {
+                    Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = colorResource(id = R.color.teal_700), modifier = Modifier.size(40.dp))
+                }
+            }
             Button(
                 onClick = { viewModel.openSearchBar() },
                 modifier = Modifier.height(60.dp),
@@ -59,6 +70,7 @@ fun MySearchBar(windowClass: WindowSizeClass, viewModel: MainViewModel) {
                 Text(text = stringResource(id = R.string.search_text), color = Color.DarkGray, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(end = 10.dp))
                 Icon(Icons.Filled.Search, contentDescription = "Search", modifier = Modifier.size(40.dp))
             }
+
         }
     }
 }

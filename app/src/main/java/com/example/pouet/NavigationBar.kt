@@ -31,7 +31,6 @@ fun MyNavigationBar(
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType =
         with(adaptiveInfo) {
-            Log.e("responsive", windowSizeClass.windowWidthSizeClass.toString())
             if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
                 NavigationSuiteType.NavigationBar
             } else
