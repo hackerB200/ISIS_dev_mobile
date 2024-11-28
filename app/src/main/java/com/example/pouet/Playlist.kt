@@ -26,12 +26,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil.compose.AsyncImage
 
 @Composable
 fun Playlist(windowSizeClass: WindowSizeClass, viewModel: MainViewModel) {
 
     val playlist by viewModel.playlist.collectAsStateWithLifecycle()
+
+    var columns = 2
+    if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
+        columns = 3
+    }
 
     if (playlist == null) {
         viewModel.getPlaylist()
@@ -63,7 +69,7 @@ fun Playlist(windowSizeClass: WindowSizeClass, viewModel: MainViewModel) {
         }
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(columns),
             horizontalArrangement = Arrangement.spacedBy(15.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.padding(5.dp)
