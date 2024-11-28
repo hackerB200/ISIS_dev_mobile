@@ -7,4 +7,5 @@
     <string name="page_series">Series</string>
     <string name="page_actors">Actors</string>
     <string name="search_text">Search</string>
+    <string name="page_playlist">Playlist</string>
 </resources>

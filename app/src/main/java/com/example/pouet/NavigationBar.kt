@@ -25,9 +25,10 @@ fun MyNavigationBar(
     val navItems = listOf(
         stringResource(R.string.page_movies),
         stringResource(R.string.page_series),
-        stringResource(R.string.page_actors)
+        stringResource(R.string.page_actors),
+        stringResource(R.string.page_playlist)
     )
-    val navIcons = listOf(Icons.film, Icons.display, Icons.user)
+    val navIcons = listOf(Icons.film, Icons.display, Icons.user, Icons.music)
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType =
         with(adaptiveInfo) {
@@ -105,6 +106,7 @@ fun MyNavigationBar(
                     Destination.DETAILS_MOVIES -> DetailMovieScreen(windowClass, viewModel)
                     Destination.DETAILS_SERIES -> DetailSerieScreen(windowClass, viewModel)
                     Destination.DETAILS_ACTORS -> DetailActorScreen(windowClass, viewModel)
+                    Destination.PLAYLIST -> Playlist(windowClass, viewModel)
                 }
             }
         }

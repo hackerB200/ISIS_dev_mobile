@@ -15,7 +15,8 @@ enum class Destination(index: Int) {
     PROFILE(3),
     DETAILS_MOVIES(4),
     DETAILS_SERIES(5),
-    DETAILS_ACTORS(6);
+    DETAILS_ACTORS(6),
+    PLAYLIST(7);
 }
 
 @HiltViewModel

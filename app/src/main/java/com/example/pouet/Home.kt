@@ -121,7 +121,7 @@ fun Contact() {
 @Composable
 fun MainButton(viewModel: MainViewModel) {
     Button(
-        onClick = { viewModel.navigateTo(0) },
+        onClick = { viewModel.navigateTo(7) },
         colors = ButtonDefaults.buttonColors(
             containerColor = colorResource(R.color.teal_700)
         )
