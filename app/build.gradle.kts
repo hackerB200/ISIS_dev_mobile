@@ -65,7 +65,7 @@ android {
 dependencies {
 
     //moshi
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+    //implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")

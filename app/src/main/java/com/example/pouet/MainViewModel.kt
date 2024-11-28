@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -45,12 +44,14 @@ class MainViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     //récupère la playlist
     private fun fetchPlaylist() : Playlist {
-        val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+        val moshi = Moshi.Builder().build()
         return moshi.adapter(Playlist::class.java).fromJson(playlistjson)!!
     }
 
     fun getPlaylist() {
-        playlist.value = fetchPlaylist()
+        viewModelScope.launch {
+            playlist.value = fetchPlaylist()
+        }
     }
 
     fun getFilmsInitiaux() {
